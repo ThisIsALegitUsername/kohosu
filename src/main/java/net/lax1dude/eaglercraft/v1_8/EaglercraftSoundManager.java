@@ -1,3 +1,4 @@
+/*
 package net.lax1dude.eaglercraft.v1_8;
 
 import java.util.Iterator;
@@ -10,6 +11,8 @@ import net.lax1dude.eaglercraft.v1_8.internal.IAudioResource;
 import net.lax1dude.eaglercraft.v1_8.internal.PlatformAudio;
 import net.lax1dude.eaglercraft.v1_8.log4j.LogManager;
 import net.lax1dude.eaglercraft.v1_8.log4j.Logger;
+
+ */
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
  *
@@ -23,8 +26,8 @@ import net.lax1dude.eaglercraft.v1_8.log4j.Logger;
  * (please read the 'LICENSE' file this repo's root directory for more info)
  *
  */
-public class EaglercraftSoundManager {
-
+//public class EaglercraftSoundManager {
+/*
 	protected static class ActiveSoundEvent {
 
 		protected final EaglercraftSoundManager manager;
@@ -97,8 +100,6 @@ public class EaglercraftSoundManager {
 
 	private static final Logger logger = LogManager.getLogger("SoundManager");
 
-	private final GameSettings settings;
-	private final SoundHandler handler;
 	private final float[] categoryVolumes;
 	private final List<ActiveSoundEvent> activeSounds;
 	private final List<WaitingSoundEvent> queuedSounds;
@@ -123,27 +124,6 @@ public class EaglercraftSoundManager {
 
 	public void reloadSoundSystem() {
 		PlatformAudio.flushAudioCache();
-	}
-
-	public void setSoundCategoryVolume(SoundCategory category, float volume) {
-		categoryVolumes[category.getCategoryId()] = volume;
-		Iterator<ActiveSoundEvent> soundItr = activeSounds.iterator();
-		while(soundItr.hasNext()) {
-			ActiveSoundEvent evt = soundItr.next();
-			if((category == SoundCategory.MASTER || evt.soundCategory == category)
-					&& !evt.soundHandle.shouldFree()) {
-				float newVolume = (evt.activeGain = evt.soundInstance.getVolume()) * categoryVolumes[SoundCategory.MASTER.getCategoryId()] *
-					(evt.soundCategory == SoundCategory.MASTER ? 1.0f : categoryVolumes[evt.soundCategory.getCategoryId()])
-					* (float)evt.soundConfig.getVolume();
-				newVolume = MathHelper.clamp_float(newVolume, 0.0f, 1.0f);
-				if(newVolume > 0.0f) {
-					evt.soundHandle.gain(newVolume);
-				}else {
-					evt.soundHandle.end();
-					soundItr.remove();
-				}
-			}
-		}
 	}
 
 	public void stopAllSounds() {
@@ -351,3 +331,5 @@ public class EaglercraftSoundManager {
 	}
 
 }
+
+*/
