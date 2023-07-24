@@ -1,3 +1,4 @@
+/*
 package net.lax1dude.eaglercraft.v1_8.minecraft;
 
 import static net.lax1dude.eaglercraft.v1_8.opengl.RealOpenGLEnums.*;
@@ -20,6 +21,8 @@ import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumWorldBlockLayer;
 
+
+
 public class ChunkUpdateManager {
 
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -34,17 +37,17 @@ public class ChunkUpdateManager {
 	private int chunkUpdatesQueued = 0;
 	private int chunkUpdatesQueuedLast = 0;
 	private long chunkUpdatesTotalLastUpdate = 0l;
-	
+
 	private final List<ChunkCompileTaskGenerator> queue = new LinkedList();
 
 	public ChunkUpdateManager() {
 		worldVertexUploader = new WorldVertexBufferUploader();
 		renderCache = new RegionRenderCacheBuilder();
 	}
-	
+
 	public static class EmptyBlockLayerException extends IllegalStateException {
 	}
-	
+
 	private void runGenerator(ChunkCompileTaskGenerator generator, Entity entity) {
 		generator.setRegionRenderCacheBuilder(renderCache);
 		float f = (float) entity.posX;
@@ -97,7 +100,7 @@ public class ChunkUpdateManager {
 			generator.setStatus(ChunkCompileTaskGenerator.Status.DONE);
 		}
 	}
-	
+
 	public boolean updateChunks(long timeout) {
 		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
 		if (entity == null) {
@@ -110,19 +113,19 @@ public class ChunkUpdateManager {
 			List<ChunkCompileTaskGenerator> droppedUpdates = new LinkedList();
 			while(!queue.isEmpty()) {
 				ChunkCompileTaskGenerator generator = queue.remove(0);
-				
+
 				if(!generator.canExecuteYet()) {
 					if(millis - generator.goddamnFuckingTimeout < 60000l) {
 						droppedUpdates.add(generator);
 					}
 					continue;
 				}
-				
+
 				runGenerator(generator, entity);
 				flag = true;
-				
+
 				++chunkUpdatesTotal;
-				
+
 				if(timeout < System.nanoTime()) {
 					break;
 				}
@@ -218,7 +221,7 @@ public class ChunkUpdateManager {
 
 	public String getDebugInfo() {
 		long millis = System.currentTimeMillis();
-		
+
 		if(millis - chunkUpdatesTotalLastUpdate > 500l) {
 			chunkUpdatesTotalLastUpdate = millis;
 			chunkUpdatesTotalLast = chunkUpdatesTotal;
@@ -231,9 +234,11 @@ public class ChunkUpdateManager {
 				chunkUpdatesQueued = 0;
 			}
 		}
-		
+
 		return "Uq: " + (chunkUpdatesTotalLast + chunkUpdatesTotalImmediateLast) + "/"
 				+ (chunkUpdatesQueuedLast + chunkUpdatesTotalImmediateLast);
 	}
-	
+
 }
+
+ */

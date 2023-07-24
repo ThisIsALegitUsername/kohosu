@@ -22,26 +22,26 @@ import net.lax1dude.eaglercraft.v1_8.log4j.Logger;
 import net.lax1dude.eaglercraft.v1_8.opengl.StreamBuffer.StreamBufferInstance;
 import net.lax1dude.eaglercraft.v1_8.vector.Matrix4f;
 import net.lax1dude.eaglercraft.v1_8.vector.Vector4f;
-import net.minecraft.util.MathHelper;
+//import net.minecraft.util.MathHelper;
 
 import static net.lax1dude.eaglercraft.v1_8.opengl.FixedFunctionShader.FixedFunctionState.*;
 import static net.lax1dude.eaglercraft.v1_8.opengl.FixedFunctionShader.FixedFunctionConstants.*;
 
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
- * 
+ *
  * WITH THE EXCEPTION OF PATCH FILES, MINIFIED JAVASCRIPT, AND ALL FILES
  * NORMALLY FOUND IN AN UNMODIFIED MINECRAFT RESOURCE PACK, YOU ARE NOT ALLOWED
  * TO SHARE, DISTRIBUTE, OR REPURPOSE ANY FILE USED BY OR PRODUCED BY THE
  * SOFTWARE IN THIS REPOSITORY WITHOUT PRIOR PERMISSION FROM THE PROJECT AUTHOR.
- * 
+ *
  * NOT FOR COMMERCIAL OR MALICIOUS USE
- * 
- * (please read the 'LICENSE' file this repo's root directory for more info) 
- * 
+ *
+ * (please read the 'LICENSE' file this repo's root directory for more info)
+ *
  */
 public class FixedFunctionPipeline {
-	
+
 	private static final Logger LOGGER = LogManager.getLogger("FixedFunctionPipeline");
 
 	static final int getFragmentState() {
@@ -57,7 +57,7 @@ public class FixedFunctionPipeline {
 						? STATE_ENABLE_FOG : 0) |
 				(GlStateManager.stateEnableShaderBlendColor ? STATE_ENABLE_BLEND_ADD : 0);
 	}
-	
+
 	static FixedFunctionPipeline setupDirect(ByteBuffer buffer, int attrib) {
 		FixedFunctionPipeline self;
 		int baseState = attrib | getFragmentState();
@@ -70,18 +70,18 @@ public class FixedFunctionPipeline {
 		}else {
 			self = getPipelineInstanceCore(baseState);
 		}
-		
+
 		StreamBufferInstance sb = self.streamBuffer.getBuffer(buffer.remaining());
 		self.currentVertexArray = sb;
-		
+
 		EaglercraftGPU.bindGLBufferArray(sb.vertexArray);
 		EaglercraftGPU.bindGLArrayBuffer(sb.vertexBuffer);
-		
+
 		_wglBufferSubData(GL_ARRAY_BUFFER, 0, buffer);
-		
+
 		return self;
 	}
-	
+
 	static void setupDisplayList(DisplayList list) {
 		FixedFunctionPipeline self;
 		int baseState = list.attribs | getFragmentState();
@@ -94,10 +94,10 @@ public class FixedFunctionPipeline {
 		}else {
 			self = getPipelineInstanceCore(baseState);
 		}
-		
+
 		EaglercraftGPU.bindGLBufferArray(list.vertexArray);
 		EaglercraftGPU.bindGLArrayBuffer(list.vertexBuffer);
-		
+
 		_wglEnableVertexAttribArray(0);
 		_wglVertexAttribPointer(0, VertexFormat.COMPONENT_POSITION_SIZE,
 				VertexFormat.COMPONENT_POSITION_FORMAT, false, self.attribStride, 0);
@@ -107,27 +107,27 @@ public class FixedFunctionPipeline {
 			_wglVertexAttribPointer(self.attribTextureIndex, VertexFormat.COMPONENT_TEX_SIZE,
 					VertexFormat.COMPONENT_TEX_FORMAT, false, self.attribStride, self.attribTextureOffset);
 		}
-		
+
 		if(self.attribColorIndex != -1) {
 			_wglEnableVertexAttribArray(self.attribColorIndex);
 			_wglVertexAttribPointer(self.attribColorIndex, VertexFormat.COMPONENT_COLOR_SIZE,
 					VertexFormat.COMPONENT_COLOR_FORMAT, true, self.attribStride, self.attribColorOffset);
 		}
-		
+
 		if(self.attribNormalIndex != -1) {
 			_wglEnableVertexAttribArray(self.attribNormalIndex);
 			_wglVertexAttribPointer(self.attribNormalIndex, VertexFormat.COMPONENT_NORMAL_SIZE,
 					VertexFormat.COMPONENT_NORMAL_FORMAT, true, self.attribStride, self.attribNormalOffset);
 		}
-		
+
 		if(self.attribLightmapIndex != -1) {
 			_wglEnableVertexAttribArray(self.attribLightmapIndex);
 			_wglVertexAttribPointer(self.attribLightmapIndex, VertexFormat.COMPONENT_LIGHTMAP_SIZE,
 					VertexFormat.COMPONENT_LIGHTMAP_FORMAT, false, self.attribStride, self.attribLightmapOffset);
 		}
-		
+
 	}
-	
+
 	static FixedFunctionPipeline setupRenderDisplayList(int attribs) {
 		int baseState = attribs | getFragmentState();
 		if(GlStateManager.stateUseExtensionPipeline) {
@@ -140,12 +140,12 @@ public class FixedFunctionPipeline {
 			return getPipelineInstanceCore(baseState);
 		}
 	}
-	
+
 	void drawArrays(int mode, int offset, int count) {
 		EaglercraftGPU.bindGLShaderProgram(shaderProgram);
 		PlatformOpenGL._wglDrawArrays(mode, offset, count);
 	}
-	
+
 	void drawDirectArrays(int mode, int offset, int count) {
 		EaglercraftGPU.bindGLShaderProgram(shaderProgram);
 		if(mode == GL_QUADS) {
@@ -175,14 +175,14 @@ public class FixedFunctionPipeline {
 			PlatformOpenGL._wglDrawArrays(mode, offset, count);
 		}
 	}
-	
+
 	void drawElements(int mode, int count, int type, int offset) {
 		EaglercraftGPU.bindGLShaderProgram(shaderProgram);
 		PlatformOpenGL._wglDrawElements(mode, count, type, offset);
 	}
-	
+
 	private static IExtPipelineCompiler extensionProvider;
-	
+
 	public static void loadExtensionPipeline(IExtPipelineCompiler provider) {
 		flushCache();
 		extensionProvider = provider;
@@ -194,7 +194,7 @@ public class FixedFunctionPipeline {
 
 	private static String shaderSourceCacheVSH = null;
 	private static String shaderSourceCacheFSH = null;
-	
+
 	private static FixedFunctionPipeline getPipelineInstanceCore(int bits) {
 		FixedFunctionPipeline pp = pipelineStateCache[bits];
 		if(pp == null) {
@@ -202,7 +202,7 @@ public class FixedFunctionPipeline {
 		}
 		return pp;
 	}
-	
+
 	private static FixedFunctionPipeline getPipelineInstanceExt(int coreBits, int extBits) {
 		coreBits &= (15 | extensionProvider.getCoreStateMask(extBits));
 		FixedFunctionPipeline[] pp = pipelineExtStateCache[coreBits];
@@ -217,11 +217,11 @@ public class FixedFunctionPipeline {
 			return ppp;
 		}
 	}
-	
+
 	private static FixedFunctionPipeline makeNewPipeline(int coreBits, int extBits, boolean enableExt) {
 		String vshSource;
 		String fshSource;
-		
+
 		Object[] extProviderUserPointer = null;
 		if(enableExt) {
 			extProviderUserPointer = new Object[1];
@@ -244,7 +244,7 @@ public class FixedFunctionPipeline {
 			}
 			fshSource = shaderSourceCacheFSH;
 		}
-		
+
 		StringBuilder macros = new StringBuilder(VERSION + "\n");
 		if((coreBits & STATE_HAS_ATTRIB_TEXTURE) != 0) {
 			macros.append("#define " + MACRO_ATTRIB_TEXTURE + "\n");
@@ -286,12 +286,12 @@ public class FixedFunctionPipeline {
 		macros.append("precision " + PRECISION_INT + " int;\n");
 		macros.append("precision " + PRECISION_FLOAT + " float;\n");
 		macros.append("precision " + PRECISION_SAMPLER + " sampler2D;\n\n");
-		
+
 		IShaderGL vsh = _wglCreateShader(GL_VERTEX_SHADER);
-		
+
 		_wglShaderSource(vsh, macros.toString() + vshSource);
 		_wglCompileShader(vsh);
-		
+
 		if(_wglGetShaderi(vsh, GL_COMPILE_STATUS) != GL_TRUE) {
 			LOGGER.error("Failed to compile GL_VERTEX_SHADER for state {} !", (visualizeBits(coreBits) + (enableExt && extBits != 0 ? " ext " + visualizeBits(extBits) : "")));
 			String log = _wglGetShaderInfoLog(vsh);
@@ -304,12 +304,12 @@ public class FixedFunctionPipeline {
 			_wglDeleteShader(vsh);
 			throw new IllegalStateException("Vertex shader could not be compiled!");
 		}
-		
+
 		IShaderGL fsh = _wglCreateShader(GL_FRAGMENT_SHADER);
-		
+
 		_wglShaderSource(fsh, macros.toString() + fshSource);
 		_wglCompileShader(fsh);
-		
+
 		if(_wglGetShaderi(fsh, GL_COMPILE_STATUS) != GL_TRUE) {
 			LOGGER.error("Failed to compile GL_FRAGMENT_SHADER for state {} !", (visualizeBits(coreBits) + (enableExt && extBits != 0 ? " ext " + visualizeBits(extBits) : "")));
 			String log = _wglGetShaderInfoLog(fsh);
@@ -323,12 +323,12 @@ public class FixedFunctionPipeline {
 			_wglDeleteShader(vsh);
 			throw new IllegalStateException("Fragment shader could not be compiled!");
 		}
-		
+
 		IProgramGL prog = _wglCreateProgram();
 
 		_wglAttachShader(prog, vsh);
 		_wglAttachShader(prog, fsh);
-		
+
 		FixedFunctionPipeline pp = null;
 		IllegalStateException err = null;
 		try {
@@ -336,12 +336,12 @@ public class FixedFunctionPipeline {
 		}catch(IllegalStateException t) {
 			err = t;
 		}
-		
+
 		_wglDetachShader(prog, vsh);
 		_wglDetachShader(prog, fsh);
 		_wglDeleteShader(fsh);
 		_wglDeleteShader(vsh);
-		
+
 		if(err != null) {
 			_wglDeleteProgram(prog);
 			throw err;
@@ -399,11 +399,11 @@ public class FixedFunctionPipeline {
 	private final int attribNormalOffset;
 	private final int attribLightmapIndex;
 	private final int attribLightmapOffset;
-	
+
 	private final int attribStride;
 
 	private final IProgramGL shaderProgram;
-	
+
 	private final IUniformGL stateColorUniform4f;
 	private float stateColorR = -999.0f;
 	private float stateColorG = -999.0f;
@@ -437,7 +437,7 @@ public class FixedFunctionPipeline {
 	private float stateLightingAmbientG = -999.0f;
 	private float stateLightingAmbientB = -999.0f;
 	private int stateLightingAmbientSerial = -1;
-	
+
 	private final IUniformGL stateNormalUniform3f;
 	private float stateNormalX = -999.0f;
 	private float stateNormalY = -999.0f;
@@ -487,7 +487,7 @@ public class FixedFunctionPipeline {
 	private final IUniformGL stateTextureMatrix01UniformMat4f;
 	private final IUniformGL stateTextureMatrix02UniformMat4f;
 	private final int[] stateTextureMatrixSerial = new int[8];
-	
+
 	private final IUniformGL stateTextureCoords01Uniform2f;
 	private final IUniformGL stateTextureCoords02Uniform2f;
 	private final float[] stateTextureCoordsX = new float[8];
@@ -507,21 +507,21 @@ public class FixedFunctionPipeline {
 
 	private FixedFunctionPipeline(int bits, int extBits, IProgramGL compiledProg) {
 		shaderProgram = compiledProg;
-		
+
 		stateBits = bits;
 		stateHasAttribTexture = (bits & STATE_HAS_ATTRIB_TEXTURE) != 0;
 		stateHasAttribColor = (bits & STATE_HAS_ATTRIB_COLOR) != 0;
 		stateHasAttribNormal = (bits & STATE_HAS_ATTRIB_NORMAL) != 0;
 		stateHasAttribLightmap = (bits & STATE_HAS_ATTRIB_LIGHTMAP) != 0;
-		
+
 		stateCoreBits = bits;
 		stateExtBits = extBits;
-		
+
 		int index = 0;
 		int stride = 0;
-		
+
 		_wglBindAttribLocation(compiledProg, index, ATTRIB_POSITION);
-		
+
 		stride += VertexFormat.COMPONENT_POSITION_STRIDE; // vec3f
 		if(stateHasAttribColor) {
 			attribColorIndex = ++index;
@@ -559,11 +559,11 @@ public class FixedFunctionPipeline {
 			attribLightmapIndex = -1;
 			attribLightmapOffset = -1;
 		}
-		
+
 		attribStride = stride;
-		
+
 		_wglLinkProgram(compiledProg);
-		
+
 		if(_wglGetProgrami(compiledProg, GL_LINK_STATUS) != GL_TRUE) {
 			LOGGER.error("Program could not be linked for state {} !", (visualizeBits(bits) + (extensionProvider != null && extBits != 0 ? " ext " + visualizeBits(extBits) : "")));
 			String log = _wglGetProgramInfoLog(compiledProg);
@@ -575,7 +575,7 @@ public class FixedFunctionPipeline {
 			}
 			throw new IllegalStateException("Program could not be linked!");
 		}
-		
+
 		streamBuffer = new StreamBuffer(FixedFunctionShader.initialSize, FixedFunctionShader.initialCount,
 				FixedFunctionShader.maxCount, (vertexArray, vertexBuffer) -> {
 					EaglercraftGPU.bindGLBufferArray(vertexArray);
@@ -590,19 +590,19 @@ public class FixedFunctionPipeline {
 						_wglVertexAttribPointer(attribTextureIndex, VertexFormat.COMPONENT_TEX_SIZE,
 								VertexFormat.COMPONENT_TEX_FORMAT, false, attribStride, attribTextureOffset);
 					}
-					
+
 					if(attribColorIndex != -1) {
 						_wglEnableVertexAttribArray(attribColorIndex);
 						_wglVertexAttribPointer(attribColorIndex, VertexFormat.COMPONENT_COLOR_SIZE,
 								VertexFormat.COMPONENT_COLOR_FORMAT, true, attribStride, attribColorOffset);
 					}
-					
+
 					if(attribNormalIndex != -1) {
 						_wglEnableVertexAttribArray(attribNormalIndex);
 						_wglVertexAttribPointer(attribNormalIndex, VertexFormat.COMPONENT_NORMAL_SIZE,
 								VertexFormat.COMPONENT_NORMAL_FORMAT, true, attribStride, attribNormalOffset);
 					}
-					
+
 					if(attribLightmapIndex != -1) {
 						_wglEnableVertexAttribArray(attribLightmapIndex);
 						_wglVertexAttribPointer(attribLightmapIndex, VertexFormat.COMPONENT_LIGHTMAP_SIZE,
@@ -618,103 +618,103 @@ public class FixedFunctionPipeline {
 		stateEnableAnisotropicFix = (bits & STATE_ENABLE_ANISOTROPIC_FIX) == STATE_ENABLE_ANISOTROPIC_FIX;
 		stateEnableFog = (bits & STATE_ENABLE_FOG) == STATE_ENABLE_FOG;
 		stateEnableBlendAdd = (bits & STATE_ENABLE_BLEND_ADD) == STATE_ENABLE_BLEND_ADD;
-		
-		for(int i = 0; i < stateLightsVectors.length; ++i) { 
+
+		for(int i = 0; i < stateLightsVectors.length; ++i) {
 			stateLightsVectors[i] = new Vector4f(-999.0f, -999.0f, -999.0f, 0.0f);
 		}
-		
+
 		for(int i = 0; i < stateTextureMatrixSerial.length; ++i) {
 			stateTextureMatrixSerial[i] = -1;
 		}
 
 		stateColorUniform4f = _wglGetUniformLocation(compiledProg,
 				UNIFORM_COLOR_NAME);
-		
+
 		stateAlphaTestUniform1f = stateEnableAlphaTest ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_ALPHA_TEST_NAME) : null;
-		
+
 		stateLightsEnabledUniform1i = stateEnableMCLighting ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_LIGHTS_ENABLED_NAME) : null;
-		
+
 		if(stateEnableMCLighting) {
 			for(int i = 0; i < stateLightsVectorsArrayUniform4f.length; ++i) {
 				stateLightsVectorsArrayUniform4f[i] =_wglGetUniformLocation(compiledProg,
 						UNIFORM_LIGHTS_VECTORS_NAME + "[" + i + "]");
 			}
 		}
-		
+
 		stateLightingAmbientUniform3f = stateEnableMCLighting ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_LIGHTS_AMBIENT_NAME) : null;
-		
+
 		stateNormalUniform3f = (!stateHasAttribNormal && stateEnableMCLighting) ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_CONSTANT_NORMAL_NAME) : null;
-		
+
 		stateFogParamUniform4f = stateEnableFog ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_FOG_PARAM_NAME) : null;
-		
+
 		stateFogColorUniform4f = stateEnableFog ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_FOG_COLOR_NAME) : null;
-		
+
 		stateTexGenPlaneUniform4i = stateEnableEndPortal ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_TEX_GEN_PLANE_NAME) : null;
-		
+
 		stateTexGenSVectorUniform4f = stateEnableEndPortal ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_TEX_GEN_S_NAME) : null;
-		
+
 		stateTexGenTVectorUniform4f = stateEnableEndPortal ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_TEX_GEN_T_NAME) : null;
-		
+
 		stateTexGenRVectorUniform4f = stateEnableEndPortal ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_TEX_GEN_R_NAME) : null;
-		
+
 		stateTexGenQVectorUniform4f = stateEnableEndPortal ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_TEX_GEN_Q_NAME) : null;
-		
+
 		stateModelMatrixUniformMat4f = _wglGetUniformLocation(compiledProg,
 				UNIFORM_MODEL_MATRIX_NAME);
-		
+
 		stateProjectionMatrixUniformMat4f = _wglGetUniformLocation(compiledProg,
 				UNIFORM_PROJECTION_MATRIX_NAME);
-		
+
 		stateModelProjectionMatrixUniformMat4f = _wglGetUniformLocation(compiledProg,
 				UNIFORM_MODEL_PROJECTION_MATRIX_NAME);
-		
+
 		stateTextureMatrix01UniformMat4f = (stateEnableEndPortal || stateHasAttribTexture) ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_TEXTURE_MATRIX_01_NAME) : null;
-		
+
 		stateTextureMatrix02UniformMat4f = stateHasAttribLightmap ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_TEXTURE_MATRIX_02_NAME) : null;
-		
+
 		stateTextureCoords01Uniform2f = (!stateHasAttribTexture && stateEnableTexture2D) ? _wglGetUniformLocation(
 				compiledProg, UNIFORM_TEXTURE_COORDS_01_NAME) : null;
-		
+
 		stateTextureCoords02Uniform2f = (!stateHasAttribLightmap && stateEnableLightmap) ? _wglGetUniformLocation(
 				compiledProg, UNIFORM_TEXTURE_COORDS_02_NAME) : null;
-		
+
 		stateAnisotropicFix2f = stateEnableAnisotropicFix ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_TEXTURE_ANISOTROPIC_FIX) : null;
-		
+
 		stateShaderBlendSrcColorUniform4f = stateEnableBlendAdd ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_BLEND_SRC_COLOR_NAME) : null;
-		
+
 		stateShaderBlendAddColorUniform4f = stateEnableBlendAdd ? _wglGetUniformLocation(compiledProg,
 				UNIFORM_BLEND_ADD_COLOR_NAME) : null;
-		
+
 		if(stateEnableTexture2D) {
 			EaglercraftGPU.bindGLShaderProgram(compiledProg);
 			_wglUniform1i(_wglGetUniformLocation(compiledProg, UNIFORM_TEXTURE_UNIT_01_NAME), 0);
 		}
-		
+
 		if(stateEnableLightmap) {
 			EaglercraftGPU.bindGLShaderProgram(compiledProg);
 			_wglUniform1i(_wglGetUniformLocation(compiledProg, UNIFORM_TEXTURE_UNIT_02_NAME), 1);
 		}
 	}
-	
+
 	public FixedFunctionPipeline update() {
-		
+
 		EaglercraftGPU.bindGLShaderProgram(shaderProgram);
-		
+
 		int serial = GlStateManager.stateColorSerial;
 		if(stateColorSerial != serial) {
 			stateColorSerial = serial;
@@ -731,11 +731,11 @@ public class FixedFunctionPipeline {
 				stateColorA = a;
 			}
 		}
-		
+
 		if(matrixCopyBuffer == null) {
 			matrixCopyBuffer = PlatformRuntime.allocateFloatBuffer(16);
 		}
-		
+
 		int ptr;
 		if(stateModelProjectionMatrixUniformMat4f == null) {
 			ptr = GlStateManager.modelMatrixStackPointer;
@@ -747,7 +747,7 @@ public class FixedFunctionPipeline {
 				matrixCopyBuffer.flip();
 				_wglUniformMatrix4fv(stateModelMatrixUniformMat4f, false, matrixCopyBuffer);
 			}
-			
+
 			ptr = GlStateManager.projectionMatrixStackPointer;
 			serial = GlStateManager.projectionMatrixStackAccessSerial[ptr];
 			if(stateProjectionMatrixSerial != serial) {
@@ -779,7 +779,7 @@ public class FixedFunctionPipeline {
 				_wglUniformMatrix4fv(stateModelProjectionMatrixUniformMat4f, false, matrixCopyBuffer);
 			}
 		}
-		
+
 		if(stateEnableAlphaTest) {
 			float v = GlStateManager.stateAlphaTestRef;
 			if(stateAlphaTestRef != v) {
@@ -787,7 +787,7 @@ public class FixedFunctionPipeline {
 				_wglUniform1f(stateAlphaTestUniform1f, v);
 			}
 		}
-		
+
 		if(stateEnableTexture2D) {
 			ptr = GlStateManager.textureMatrixStackPointer[0];
 			serial = GlStateManager.textureMatrixStackAccessSerial[0][ptr];
@@ -820,7 +820,7 @@ public class FixedFunctionPipeline {
 				}
 			}
 		}
-		
+
 		if(stateEnableLightmap) {
 			ptr = GlStateManager.textureMatrixStackPointer[1];
 			serial = GlStateManager.textureMatrixStackAccessSerial[1][ptr];
@@ -852,7 +852,7 @@ public class FixedFunctionPipeline {
 				}
 			}
 		}
-		
+
 		if(stateEnableMCLighting) {
 			ptr = GlStateManager.stateLightsStackPointer;
 			serial = GlStateManager.stateLightingSerial[ptr];
@@ -881,14 +881,14 @@ public class FixedFunctionPipeline {
 						}
 					}
 				}
-				
+
 				if(stateLightsEnabled != lightsCounter) {
 					stateLightsEnabled = lightsCounter;
 					_wglUniform1i(stateLightsEnabledUniform1i, lightsCounter);
 				}
-				
+
 			}
-			
+
 			serial = GlStateManager.stateLightingAmbientSerial;
 			if(stateLightingAmbientSerial != serial) {
 				stateLightingAmbientSerial = serial;
@@ -903,7 +903,7 @@ public class FixedFunctionPipeline {
 					_wglUniform3f(stateLightingAmbientUniform3f, r, g, b);
 				}
 			}
-			
+
 			if(!stateHasAttribNormal) {
 				serial = GlStateManager.stateNormalSerial;
 				if(stateNormalSerial != serial) {
@@ -911,7 +911,7 @@ public class FixedFunctionPipeline {
 					float x = GlStateManager.stateNormalX;
 					float y = GlStateManager.stateNormalY;
 					float z = GlStateManager.stateNormalZ;
-					float c = 1.0f / MathHelper.sqrt_float(x * x + y * y + z * z);
+					float c = 1.0f / (float) Math.sqrt(x * x + y * y + z * z);
 					x *= c; y *= c; z *= c;
 					if(stateNormalX != x || stateNormalY != y || stateNormalZ != z) {
 						stateNormalX = x;
@@ -922,7 +922,7 @@ public class FixedFunctionPipeline {
 				}
 			}
 		}
-		
+
 		if(stateEnableFog) {
 			serial = GlStateManager.stateFogSerial;
 			if(stateFogSerial != serial) {
@@ -953,7 +953,7 @@ public class FixedFunctionPipeline {
 				}
 			}
 		}
-		
+
 		if(stateEnableAnisotropicFix) {
 			serial = GlStateManager.stateAnisotropicFixSerial;
 			if(stateAnisotropicFixSerial != serial) {
@@ -967,7 +967,7 @@ public class FixedFunctionPipeline {
 				}
 			}
 		}
-		
+
 		if(stateEnableEndPortal) {
 			serial = GlStateManager.stateTexGenSerial;
 			if(stateTexGenSerial != serial) {
@@ -1024,7 +1024,7 @@ public class FixedFunctionPipeline {
 				}
 			}
 		}
-		
+
 		if(stateEnableBlendAdd) {
 			serial = GlStateManager.stateShaderBlendColorSerial;
 			if(stateShaderBlendColorSerial != serial) {
@@ -1055,11 +1055,11 @@ public class FixedFunctionPipeline {
 				}
 			}
 		}
-		
+
 		if(extensionProvider != null && extensionPointer != null) {
 			extensionProvider.updatePipeline(shaderProgram, stateCoreBits, stateExtBits, extensionPointer);
 		}
-		
+
 		return this;
 	}
 
@@ -1098,12 +1098,12 @@ public class FixedFunctionPipeline {
 		}
 		pipelineListTracker.clear();
 	}
-	
+
 	public void destroy() {
 		PlatformOpenGL._wglDeleteProgram(shaderProgram);
 		streamBuffer.destroy();
 	}
-	
+
 	public IBufferArrayGL getDirectModeBufferArray() {
 		return currentVertexArray.vertexArray;
 	}
