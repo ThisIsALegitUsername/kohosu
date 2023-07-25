@@ -1,3 +1,4 @@
+/*
 package net.lax1dude.eaglercraft.v1_8.profile;
 
 import java.io.ByteArrayOutputStream;
@@ -9,6 +10,7 @@ import net.lax1dude.eaglercraft.v1_8.EagRuntime;
 import net.lax1dude.eaglercraft.v1_8.EaglerInputStream;
 import net.lax1dude.eaglercraft.v1_8.EaglercraftRandom;
 import net.lax1dude.eaglercraft.v1_8.EaglercraftUUID;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
@@ -18,28 +20,29 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
- * 
+ *
  * WITH THE EXCEPTION OF PATCH FILES, MINIFIED JAVASCRIPT, AND ALL FILES
  * NORMALLY FOUND IN AN UNMODIFIED MINECRAFT RESOURCE PACK, YOU ARE NOT ALLOWED
  * TO SHARE, DISTRIBUTE, OR REPURPOSE ANY FILE USED BY OR PRODUCED BY THE
  * SOFTWARE IN THIS REPOSITORY WITHOUT PRIOR PERMISSION FROM THE PROJECT AUTHOR.
- * 
+ *
  * NOT FOR COMMERCIAL OR MALICIOUS USE
- * 
- * (please read the 'LICENSE' file this repo's root directory for more info) 
- * 
+ *
+ * (please read the 'LICENSE' file this repo's root directory for more info)
+ *
  */
+/*
 public class EaglerProfile {
 
 	private static String username;
-	
+
 	public static int presetSkinId;
 	public static int customSkinId;
-	
+
 	public static final List<CustomSkin> customSkins = new ArrayList();
-	
+
 	public static final EaglercraftRandom rand;
-	
+
 	public static ResourceLocation getActiveSkinResourceLocation() {
 		if(presetSkinId == -1) {
 			if(customSkinId >= 0 && customSkinId < customSkins.size()) {
@@ -58,7 +61,7 @@ public class EaglerProfile {
 			}
 		}
 	}
-	
+
 	public static SkinModel getActiveSkinModel() {
 		if(presetSkinId == -1) {
 			if(customSkinId >= 0 && customSkinId < customSkins.size()) {
@@ -190,7 +193,7 @@ public class EaglerProfile {
 			newSkin.load();
 			customSkins.add(newSkin);
 		}
-		
+
 		if(presetSkinId == -1) {
 			if(customSkinId < 0 || customSkinId >= customSkins.size()) {
 				presetSkinId = 0;
@@ -234,18 +237,20 @@ public class EaglerProfile {
 				"Yeeish", "Yeeish", "Yee", "Yee", "Yeer", "Yeeler", "Eagler", "Eagl",
 				"Darver", "Darvler", "Vool", "Vigg", "Vigg", "Deev", "Yigg", "Yeeg"
 		};
-		
+
 		rand = new EaglercraftRandom();
-		
+
 		do {
 			username = defaultNames[rand.nextInt(defaultNames.length)] + defaultNames[rand.nextInt(defaultNames.length)] + (100 + rand.nextInt(900));
 		}while(username.length() > 16);
-		
+
 		setName(username);
-		
+
 		presetSkinId = rand.nextInt(DefaultSkins.defaultSkinsMap.length);
 		customSkinId = -1;
-		
+
 	}
 
 }
+
+ */

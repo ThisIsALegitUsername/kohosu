@@ -1,20 +1,21 @@
-package net.lax1dude.eaglercraft.v1_8.profile;
+//package net.lax1dude.eaglercraft.v1_8.profile;
 
-import net.minecraft.util.ResourceLocation;
+//import net.minecraft.util.ResourceLocation;
 
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
- * 
+ *
  * WITH THE EXCEPTION OF PATCH FILES, MINIFIED JAVASCRIPT, AND ALL FILES
  * NORMALLY FOUND IN AN UNMODIFIED MINECRAFT RESOURCE PACK, YOU ARE NOT ALLOWED
  * TO SHARE, DISTRIBUTE, OR REPURPOSE ANY FILE USED BY OR PRODUCED BY THE
  * SOFTWARE IN THIS REPOSITORY WITHOUT PRIOR PERMISSION FROM THE PROJECT AUTHOR.
- * 
+ *
  * NOT FOR COMMERCIAL OR MALICIOUS USE
- * 
- * (please read the 'LICENSE' file this repo's root directory for more info) 
- * 
+ *
+ * (please read the 'LICENSE' file this repo's root directory for more info)
+ *
  */
+/*
 public enum DefaultSkins {
 
 	DEFAULT_STEVE(0, "Default Steve", new ResourceLocation("eagler:skins/01.default_steve.png"), SkinModel.STEVE),
@@ -41,21 +42,21 @@ public enum DefaultSkins {
 	ZOMBIE(21, "Zombie", new ResourceLocation("eagler:skins/22.zombie.png"), SkinModel.ZOMBIE),
 	PIG(22, "Pig", new ResourceLocation("eagler:skins/23.pig.png"), SkinModel.STEVE),
 	MOOSHROOM(23, "Mooshroom", new ResourceLocation("eagler:skins/24.mooshroom.png"), SkinModel.STEVE);
-	
+
 	public static final DefaultSkins[] defaultSkinsMap = new DefaultSkins[24];
-	
+
 	public final int id;
 	public final String name;
 	public final ResourceLocation location;
 	public final SkinModel model;
-	
+
 	private DefaultSkins(int id, String name, ResourceLocation location, SkinModel model) {
 		this.id = id;
 		this.name = name;
 		this.location = location;
 		this.model = model;
 	}
-	
+
 	public static DefaultSkins getSkinFromId(int id) {
 		DefaultSkins e = null;
 		if(id >= 0 && id < defaultSkinsMap.length) {
@@ -67,7 +68,7 @@ public enum DefaultSkins {
 			return DEFAULT_STEVE;
 		}
 	}
-	
+
 	static {
 		DefaultSkins[] skins = values();
 		for(int i = 0; i < skins.length; ++i) {
@@ -76,3 +77,5 @@ public enum DefaultSkins {
 	}
 
 }
+
+ */

@@ -1,3 +1,4 @@
+/*
 package net.lax1dude.eaglercraft.v1_8.profile;
 
 import java.io.IOException;
@@ -16,53 +17,60 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.util.ResourceLocation;
 
+ */
+
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
- * 
+ *
  * WITH THE EXCEPTION OF PATCH FILES, MINIFIED JAVASCRIPT, AND ALL FILES
  * NORMALLY FOUND IN AN UNMODIFIED MINECRAFT RESOURCE PACK, YOU ARE NOT ALLOWED
  * TO SHARE, DISTRIBUTE, OR REPURPOSE ANY FILE USED BY OR PRODUCED BY THE
  * SOFTWARE IN THIS REPOSITORY WITHOUT PRIOR PERMISSION FROM THE PROJECT AUTHOR.
- * 
+ *
  * NOT FOR COMMERCIAL OR MALICIOUS USE
- * 
- * (please read the 'LICENSE' file this repo's root directory for more info) 
- * 
+ *
+ * (please read the 'LICENSE' file this repo's root directory for more info)
+ *
  */
+
+/*
 public class ServerSkinCache {
 
 	private static final Logger logger = LogManager.getLogger("ServerSkinCache");
 
 	public class SkinCacheEntry {
-		
+
 		protected final boolean isPresetSkin;
 		protected final int presetSkinId;
 		protected final CacheCustomSkin customSkin;
-		
+
 		protected long lastCacheHit = System.currentTimeMillis();
-		
+
 		protected SkinCacheEntry(EaglerSkinTexture textureInstance, ResourceLocation resourceLocation, SkinModel model) {
 			this.isPresetSkin = false;
 			this.presetSkinId = -1;
 			this.customSkin = new CacheCustomSkin(textureInstance, resourceLocation, model);
 			ServerSkinCache.this.textureManager.loadTexture(resourceLocation, textureInstance);
 		}
-		
+
+ */
+
 		/**
 		 * Use only for the constant for the client player
 		 */
+		/*
 		protected SkinCacheEntry(ResourceLocation resourceLocation, SkinModel model) {
 			this.isPresetSkin = false;
 			this.presetSkinId = -1;
 			this.customSkin = new CacheCustomSkin(null, resourceLocation, model);
 		}
-		
+
 		protected SkinCacheEntry(int presetSkinId) {
 			this.isPresetSkin = true;
 			this.presetSkinId = presetSkinId;
 			this.customSkin = null;
 		}
-		
+
 		public ResourceLocation getResourceLocation() {
 			if(isPresetSkin) {
 				return DefaultSkins.getSkinFromId(presetSkinId).location;
@@ -74,7 +82,7 @@ public class ServerSkinCache {
 				}
 			}
 		}
-		
+
 		public SkinModel getSkinModel() {
 			if(isPresetSkin) {
 				return DefaultSkins.getSkinFromId(presetSkinId).model;
@@ -86,7 +94,7 @@ public class ServerSkinCache {
 				}
 			}
 		}
-		
+
 		protected void free() {
 			if(!isPresetSkin) {
 				ServerSkinCache.this.textureManager.deleteTexture(customSkin.resourceLocation);
@@ -96,11 +104,11 @@ public class ServerSkinCache {
 	}
 
 	protected static class CacheCustomSkin {
-		
+
 		protected final EaglerSkinTexture textureInstance;
 		protected final ResourceLocation resourceLocation;
 		protected final SkinModel model;
-		
+
 		protected CacheCustomSkin(EaglerSkinTexture textureInstance, ResourceLocation resourceLocation, SkinModel model) {
 			this.textureInstance = textureInstance;
 			this.resourceLocation = resourceLocation;
@@ -110,10 +118,10 @@ public class ServerSkinCache {
 	}
 
 	protected static class WaitingSkin {
-		
+
 		protected final long timeout;
 		protected final SkinModel model;
-		
+
 		protected WaitingSkin(long timeout, SkinModel model) {
 			this.timeout = timeout;
 			this.model = model;
@@ -129,7 +137,7 @@ public class ServerSkinCache {
 
 	private final EaglercraftNetworkManager networkManager;
 	protected final TextureManager textureManager;
-	
+
 	private final EaglercraftUUID clientPlayerId;
 	private final SkinCacheEntry clientPlayerCacheEntry;
 
@@ -237,7 +245,7 @@ public class ServerSkinCache {
 			logger.error("Unsolicited skin response recieved for \"{}\"! (preset {})", player, presetId);
 		}
 	}
-	
+
 	public void cacheSkinCustom(EaglercraftUUID player, byte[] pixels, SkinModel model) {
 		WaitingSkin waitingSkin;
 		if((waitingSkin = waitingSkins.remove(player)) != null) {
@@ -263,7 +271,7 @@ public class ServerSkinCache {
 			logger.error("Unsolicited skin response recieved for \"{}\"! (custom {}x{})", player, model.width, model.height);
 		}
 	}
-	
+
 	public SkinModel getRequestedSkinType(EaglercraftUUID waiting) {
 		WaitingSkin waitingSkin;
 		if((waitingSkin = waitingSkins.get(waiting)) != null) {
@@ -272,7 +280,7 @@ public class ServerSkinCache {
 			return null;
 		}
 	}
-	
+
 	public void flush() {
 		long millis = System.currentTimeMillis();
 		if(millis - lastFlushReq > 5000l) {
@@ -311,7 +319,7 @@ public class ServerSkinCache {
 			}
 		}
 	}
-	
+
 	public void destroy() {
 		Iterator<SkinCacheEntry> entryItr = skinsCache.values().iterator();
 		while(entryItr.hasNext()) {
@@ -320,7 +328,7 @@ public class ServerSkinCache {
 		skinsCache.clear();
 		waitingSkins.clear();
 	}
-	
+
 	public void evictSkin(EaglercraftUUID uuid) {
 		evictedSkins.put(uuid, Long.valueOf(System.currentTimeMillis()));
 		SkinCacheEntry etr = skinsCache.remove(uuid);
@@ -330,3 +338,5 @@ public class ServerSkinCache {
 	}
 
 }
+
+		 */

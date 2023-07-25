@@ -13,20 +13,20 @@ import net.lax1dude.eaglercraft.v1_8.opengl.GlStateManager;
 import net.lax1dude.eaglercraft.v1_8.opengl.SpriteLevelMixer;
 import net.lax1dude.eaglercraft.v1_8.opengl.TextureCopyUtil;
 import net.lax1dude.eaglercraft.v1_8.vector.Matrix3f;
-import net.minecraft.client.renderer.GLAllocation;
+//import net.minecraft.client.renderer.GLAllocation;
 
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
- * 
+ *
  * WITH THE EXCEPTION OF PATCH FILES, MINIFIED JAVASCRIPT, AND ALL FILES
  * NORMALLY FOUND IN AN UNMODIFIED MINECRAFT RESOURCE PACK, YOU ARE NOT ALLOWED
  * TO SHARE, DISTRIBUTE, OR REPURPOSE ANY FILE USED BY OR PRODUCED BY THE
  * SOFTWARE IN THIS REPOSITORY WITHOUT PRIOR PERMISSION FROM THE PROJECT AUTHOR.
- * 
+ *
  * NOT FOR COMMERCIAL OR MALICIOUS USE
- * 
- * (please read the 'LICENSE' file this repo's root directory for more info) 
- * 
+ *
+ * (please read the 'LICENSE' file this repo's root directory for more info)
+ *
  */
 public class TextureAnimationCache {
 
@@ -58,39 +58,39 @@ public class TextureAnimationCache {
 				EaglercraftGPU.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			}
 		}
-		
+
 		frameCount = frames.size();
-		IntBuffer pixels = GLAllocation.createDirectIntBuffer(width * height * frameCount);
-		
+		//IntBuffer pixels = GLAllocation.createDirectIntBuffer(width * height * frameCount);
+
 		try {
 			for(int i = 0; i < mipLevels; ++i) {
-				pixels.clear();
-				
+				//pixels.clear();
+
 				int lw = width >> i;
 				int lh = height >> i;
 				int tileLength = lw * lh;
-				
+
 				for(int j = 0; j < frameCount; ++j) {
 					int[][] frame = frames.get(j);
 					if(frame.length <= i) {
 						throw new IllegalArgumentException("Frame #" + j + " only has " + frame.length + " mipmap levels! (" + mipLevels + " were expected)");
 					}
-					
+
 					int[] frameLevel = frame[i];
 					if(frameLevel.length != tileLength) {
 						throw new IllegalArgumentException("Frame #" + j + " level " + i + " is " + frameLevel.length + " pixels large! (" + tileLength + " expected)");
 					}
-					
-					pixels.put(frameLevel);
+
+					//pixels.put(frameLevel);
 				}
-				
-				pixels.flip();
-				
+
+				//pixels.flip();
+
 				GlStateManager.bindTexture(cacheTextures[i]);
-				EaglercraftGPU.glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, lw, lh * frameCount, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+				//EaglercraftGPU.glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, lw, lh * frameCount, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 			}
 		}finally {
-			EagRuntime.freeIntBuffer(pixels);
+			//EagRuntime.freeIntBuffer(pixels);
 		}
 	}
 
@@ -147,31 +147,31 @@ public class TextureAnimationCache {
 		if(cacheTextures == null) {
 			throw new IllegalStateException("Cannot copy from uninitialized TextureAnimationCache");
 		}
-		
+
 		GlStateManager.viewport(dx, dy, w, h);
 		GlStateManager.bindTexture(cacheTextures[level]);
 		GlStateManager.disableBlend();
-		
+
 		Matrix3f matrix = new Matrix3f();
 		matrix.m11 = 1.0f / frameCount;
 		matrix.m21 = matrix.m11 * animationFrameFrom;
-		
+
 		SpriteLevelMixer.setMatrix3f(matrix);
 		SpriteLevelMixer.setBlendColor(factor, factor, factor, factor);
 		SpriteLevelMixer.setBiasColor(0.0f, 0.0f, 0.0f, 0.0f);
-		
+
 		SpriteLevelMixer.drawSprite(0);
-		
+
 		matrix.m21 = matrix.m11 * animationFrameTo;
 		SpriteLevelMixer.setMatrix3f(matrix);
 		float fac1 = 1.0f - factor;
 		SpriteLevelMixer.setBlendColor(fac1, fac1, fac1, fac1);
-		
+
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL_ONE, GL_ONE);
-		
+
 		SpriteLevelMixer.drawSprite(0);
-		
+
 		GlStateManager.disableBlend();
 		GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}

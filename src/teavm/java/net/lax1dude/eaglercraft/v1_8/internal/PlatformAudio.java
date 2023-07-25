@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundCategory;
+//import net.minecraft.client.Minecraft;
+//import net.minecraft.client.audio.SoundCategory;
 import org.teavm.interop.Async;
 import org.teavm.interop.AsyncCallback;
 import org.teavm.jso.JSObject;
@@ -26,44 +26,44 @@ import org.teavm.jso.webaudio.PannerNode;
 
 import net.lax1dude.eaglercraft.v1_8.log4j.LogManager;
 import net.lax1dude.eaglercraft.v1_8.log4j.Logger;
-import net.minecraft.util.MathHelper;
+import net.lax1dude.eaglercraft.v1_8.MathHelper;
 
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
- * 
+ *
  * WITH THE EXCEPTION OF PATCH FILES, MINIFIED JAVASCRIPT, AND ALL FILES
  * NORMALLY FOUND IN AN UNMODIFIED MINECRAFT RESOURCE PACK, YOU ARE NOT ALLOWED
  * TO SHARE, DISTRIBUTE, OR REPURPOSE ANY FILE USED BY OR PRODUCED BY THE
  * SOFTWARE IN THIS REPOSITORY WITHOUT PRIOR PERMISSION FROM THE PROJECT AUTHOR.
- * 
+ *
  * NOT FOR COMMERCIAL OR MALICIOUS USE
- * 
+ *
  * (please read the 'LICENSE' file this repo's root directory for more info)
- * 
+ *
  */
 public class PlatformAudio {
-	
+
 	static final Logger logger = LogManager.getLogger("BrowserAudio");
-	
+
 	private static AudioContext audioctx = null;
 	private static MediaStreamAudioDestinationNode recDest = null;
 	private static final Map<String, BrowserAudioResource> soundCache = new HashMap();
-	
+
 	private static long cacheFreeTimer = 0l;
-	
+
 	protected static class BrowserAudioResource implements IAudioResource {
-		
+
 		protected AudioBuffer buffer;
 		protected long cacheHit = 0l;
-		
+
 		protected BrowserAudioResource(AudioBuffer buffer) {
 			this.buffer = buffer;
 		}
-		
+
 	}
-	
+
 	protected static class BrowserAudioHandle implements IAudioHandle, EventListener<MediaEvent> {
-		
+
 		protected final BrowserAudioResource resource;
 		protected AudioBufferSourceNode source;
 		protected final PannerNode panner;
@@ -71,7 +71,7 @@ public class PlatformAudio {
 		protected float pitch;
 		protected boolean isPaused = false;
 		protected boolean isEnded = false;
-		
+
 		public BrowserAudioHandle(BrowserAudioResource resource, AudioBufferSourceNode source, PannerNode panner,
 				GainNode gain, float pitch) {
 			this.resource = resource;
@@ -159,20 +159,20 @@ public class PlatformAudio {
 		public void handleEvent(MediaEvent evt) {
 			isEnded = true;
 		}
-		
+
 	}
-	
+
 	static void initialize() {
-		
+
 		try {
 			audioctx = AudioContext.create();
 			recDest = audioctx.createMediaStreamDestination();
 		}catch(Throwable t) {
 			throw new PlatformRuntime.RuntimeInitializationFailureException("Could not initialize audio context!", t);
 		}
-		
+
 		PlatformInput.clearEvenBuffers();
-		
+
 	}
 
 	private static GainNode micGain;
@@ -193,7 +193,7 @@ public class PlatformAudio {
 		MediaStream mic = PlatformRuntime.getMic();
 		if (mic != null) {
 			micGain = audioctx.createGain();
-			micGain.getGain().setValue(Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.VOICE));
+			//micGain.getGain().setValue(Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.VOICE));
 			audioctx.createMediaStreamSource(mic).connect(micGain);
 			micGain.connect(recDest);
 		}
@@ -256,10 +256,10 @@ public class PlatformAudio {
 			return null;
 		}
 	}
-	
+
 	@Async
 	public static native AudioBuffer decodeAudioAsync(ArrayBuffer buffer, String errorFileName);
-	
+
 	private static void decodeAudioAsync(ArrayBuffer buffer, final String errorFileName, final AsyncCallback<AudioBuffer> cb) {
 		audioctx.decodeAudioData(buffer, new DecodeSuccessCallback() {
 			@Override
@@ -295,20 +295,20 @@ public class PlatformAudio {
 			soundCache.clear();
 		}
 	}
-	
+
 	public static boolean available() {
 		return true; // this is not used
 	}
-	
+
 	public static IAudioHandle beginPlayback(IAudioResource track, float x, float y, float z,
 			float volume, float pitch) {
 		BrowserAudioResource internalTrack = (BrowserAudioResource) track;
 		internalTrack.cacheHit = System.currentTimeMillis();
-		
+
 		AudioBufferSourceNode src = audioctx.createBufferSource();
 		src.setBuffer(internalTrack.buffer);
 		src.getPlaybackRate().setValue(pitch);
-		
+
 		PannerNode panner = audioctx.createPanner();
 		panner.setPosition(x, y, z);
 		float v1 = volume * 16.0f;
@@ -321,41 +321,41 @@ public class PlatformAudio {
 		panner.setConeOuterAngle(0.0f);
 		panner.setConeOuterGain(0.0f);
 		panner.setOrientation(0.0f, 1.0f, 0.0f);
-		
+
 		GainNode gain = audioctx.createGain();
 		float v2 = volume;
 		if(v2 > 1.0f) v2 = 1.0f;
 		gain.getGain().setValue(v2);
-		
+
 		src.connect(panner);
 		panner.connect(gain);
 		gain.connect(audioctx.getDestination());
 		gain.connect(recDest);
 
 		src.start();
-		
+
 		return new BrowserAudioHandle(internalTrack, src, panner, gain, pitch);
 	}
 
 	public static IAudioHandle beginPlaybackStatic(IAudioResource track, float volume, float pitch) {
 		BrowserAudioResource internalTrack = (BrowserAudioResource) track;
 		internalTrack.cacheHit = System.currentTimeMillis();
-		
+
 		AudioBufferSourceNode src = audioctx.createBufferSource();
 		src.setBuffer(internalTrack.buffer);
 		src.getPlaybackRate().setValue(pitch);
-		
+
 		GainNode gain = audioctx.createGain();
 		float v2 = volume;
 		if(v2 > 1.0f) v2 = 1.0f;
 		gain.getGain().setValue(v2);
-		
+
 		src.connect(gain);
 		gain.connect(audioctx.getDestination());
 		gain.connect(recDest);
-		
+
 		src.start();
-		
+
 		return new BrowserAudioHandle(internalTrack, src, null, gain, pitch);
 	}
 
@@ -368,5 +368,5 @@ public class PlatformAudio {
 		l.setPosition(x, y, z);
 		l.setOrientation(-var3 * var4, -var5, -var2 * var4, 0.0f, 1.0f, 0.0f);
 	}
-	
+
 }

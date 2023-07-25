@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.function.Consumer;
 
 import net.lax1dude.eaglercraft.v1_8.EaglercraftVersion;
-import net.lax1dude.eaglercraft.v1_8.profile.EaglerProfile;
+//import net.lax1dude.eaglercraft.v1_8.profile.EaglerProfile;
 import org.teavm.interop.Async;
 import org.teavm.interop.AsyncCallback;
 import org.teavm.jso.JSBody;
@@ -52,19 +52,19 @@ import net.lax1dude.eaglercraft.v1_8.opengl.RealOpenGLEnums;
 
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
- * 
+ *
  * WITH THE EXCEPTION OF PATCH FILES, MINIFIED JAVASCRIPT, AND ALL FILES
  * NORMALLY FOUND IN AN UNMODIFIED MINECRAFT RESOURCE PACK, YOU ARE NOT ALLOWED
  * TO SHARE, DISTRIBUTE, OR REPURPOSE ANY FILE USED BY OR PRODUCED BY THE
  * SOFTWARE IN THIS REPOSITORY WITHOUT PRIOR PERMISSION FROM THE PROJECT AUTHOR.
- * 
+ *
  * NOT FOR COMMERCIAL OR MALICIOUS USE
- * 
+ *
  * (please read the 'LICENSE' file this repo's root directory for more info)
- * 
+ *
  */
 public class PlatformRuntime {
-	
+
 	static final Logger logger = LogManager.getLogger("BrowserRuntime");
 
 	public static Window win = null;
@@ -72,15 +72,15 @@ public class PlatformRuntime {
 	public static HTMLElement parent = null;
 	public static HTMLCanvasElement canvas = null;
 	public static WebGL2RenderingContext webgl = null;
-	
+
 	static WebGLFramebuffer mainFramebuffer = null;
 
 	public static void create() {
 		win = Window.current();
 		doc = win.getDocument();
-		
+
 		logger.info("Creating main game canvas");
-		
+
 		parent = doc.getElementById(MainClass.configRootElement);
 		if(parent == null) {
 			throw new RuntimeInitializationFailureException("Root element \"" + MainClass.configRootElement + "\" was not found in this document!");
@@ -89,14 +89,14 @@ public class PlatformRuntime {
 		CSSStyleDeclaration style = parent.getStyle();
 		style.setProperty("overflowX", "hidden");
 		style.setProperty("overflowY", "hidden");
-		
+
 		canvas = (HTMLCanvasElement) doc.createElement("canvas");
-		
+
 		style = canvas.getStyle();
 		style.setProperty("width", "100%");
 		style.setProperty("height", "100%");
 		style.setProperty("image-rendering", "pixelated");
-		
+
 		double r = win.getDevicePixelRatio();
 		int iw = parent.getClientWidth();
 		int ih = parent.getClientHeight();
@@ -105,15 +105,15 @@ public class PlatformRuntime {
 
 		canvas.setWidth(sw);
 		canvas.setHeight(sh);
-		
+
 		parent.appendChild(canvas);
-		
+
 		try {
 			PlatformInput.initHooks(win, canvas);
 		}catch(Throwable t) {
 			throw new RuntimeInitializationFailureException("Exception while registering window event handlers", t);
 		}
-		
+
 		try {
 			doc.exitPointerLock();
 		}catch(Throwable t) {
@@ -121,36 +121,36 @@ public class PlatformRuntime {
 		}
 
 		logger.info("Creating WebGL context");
-		
+
 		JSObject webgl_ = canvas.getContext("webgl2", youEagler());
 		if(webgl_ == null) {
 			throw new PlatformIncompatibleException("WebGL 2.0 is not supported on this device!");
 		}
-		
+
 		webgl = (WebGL2RenderingContext) webgl_;
 		PlatformOpenGL.setCurrentContext(webgl);
-		
+
 		mainFramebuffer = webgl.createFramebuffer();
 		PlatformInput.initFramebuffer(webgl, mainFramebuffer, sw, sh);
-		
+
 		EarlyLoadScreen.paintScreen();
-		
+
 		EPKFileEntry[] epkFiles = MainClass.configEPKFiles;
-		
+
 		for(int i = 0; i < epkFiles.length; ++i) {
 			String url = epkFiles[i].url;
 			String logURL = url.startsWith("data:") ? "<data: " + url.length() + " chars>" : url;
-			
+
 			logger.info("Downloading: {}", logURL);
-			
+
 			ArrayBuffer epkFileData = downloadRemoteURI(url);
-			
+
 			if(epkFileData == null) {
 				throw new RuntimeInitializationFailureException("Could not download EPK file \"" + url + "\"");
 			}
-			
+
 			logger.info("Decompressing: {}", logURL);
-			
+
 			try {
 				EPKLoader.loadEPK(epkFileData, epkFiles[i].path, PlatformAssets.assets);
 			}catch(Throwable t) {
@@ -174,10 +174,10 @@ public class PlatformRuntime {
 
 		logger.info("Platform initialization complete");
 	}
-	
+
 	@JSBody(params = { }, script = "return {antialias: false, depth: false, powerPreference: \"high-performance\", desynchronized: true, preserveDrawingBuffer: false, premultipliedAlpha: false, alpha: false};")
 	public static native JSObject youEagler();
-	
+
 	public static class RuntimeInitializationFailureException extends IllegalStateException {
 
 		public RuntimeInitializationFailureException(String message, Throwable cause) {
@@ -187,15 +187,15 @@ public class PlatformRuntime {
 		public RuntimeInitializationFailureException(String s) {
 			super(s);
 		}
-		
+
 	}
-	
+
 	public static class PlatformIncompatibleException extends IllegalStateException {
 
 		public PlatformIncompatibleException(String s) {
 			super(s);
 		}
-		
+
 	}
 
 	public static void destroy() {
@@ -243,17 +243,17 @@ public class PlatformRuntime {
 	public static FloatBuffer allocateFloatBuffer(int length) {
 		return EaglerArrayBufferAllocator.allocateFloatBuffer(length);
 	}
-	
+
 	public static void freeByteBuffer(ByteBuffer byteBuffer) {
-		
+
 	}
-	
+
 	public static void freeIntBuffer(IntBuffer intBuffer) {
-		
+
 	}
-	
+
 	public static void freeFloatBuffer(FloatBuffer floatBuffer) {
-		
+
 	}
 
 	public static void downloadRemoteURI(String assetPackageURI, final Consumer<ArrayBuffer> cb) {
@@ -270,7 +270,7 @@ public class PlatformRuntime {
 			}
 		});
 	}
-	
+
 	@Async
 	public static native ArrayBuffer downloadRemoteURI(String assetPackageURI);
 
@@ -278,7 +278,7 @@ public class PlatformRuntime {
 		final XMLHttpRequest request = XMLHttpRequest.create();
 		request.setResponseType("arraybuffer");
 		request.open("GET", assetPackageURI, true);
-		
+
 		TeaVMUtils.addEventListener(request, "load", new EventListener<Event>() {
 			@Override
 			public void handleEvent(Event evt) {
@@ -290,21 +290,21 @@ public class PlatformRuntime {
 				}
 			}
 		});
-		
+
 		TeaVMUtils.addEventListener(request, "error", new EventListener<Event>() {
 			@Override
 			public void handleEvent(Event evt) {
 				cb.complete(null);
 			}
 		});
-		
+
 		request.send();
 	}
-	
+
 	public static boolean isDebugRuntime() {
 		return false;
 	}
-	
+
 	public static void writeCrashReport(String crashDump) {
 		MainClass.showCrashScreen(crashDump);
 	}
@@ -315,7 +315,7 @@ public class PlatformRuntime {
 		}catch(Throwable t) {
 		}
 	}
-	
+
 	public static void getStackTrace(Throwable t, Consumer<String> ret) {
 		JSObject o = JSExceptions.getJSException(t);
 		if(o != null) {
@@ -341,7 +341,7 @@ public class PlatformRuntime {
 		}
 		getFallbackStackTrace(t, ret);
 	}
-	
+
 	private static void getFallbackStackTrace(Throwable t, Consumer<String> ret) {
 		StackTraceElement[] el = t.getStackTrace();
 		if(el.length > 0) {
@@ -352,10 +352,10 @@ public class PlatformRuntime {
 			ret.accept("[no stack trace]");
 		}
 	}
-	
+
 	@JSBody(params = { "o" }, script = "console.error(o);")
 	private static native void printNativeExceptionToConsole(JSObject o);
-	
+
 	public static boolean printJSExceptionIfBrowser(Throwable t) {
 		if(t != null) {
 			JSObject o = JSExceptions.getJSException(t);
@@ -386,30 +386,30 @@ public class PlatformRuntime {
 	public static long freeMemory() {
 		return 1073741824l;
 	}
-	
+
 	public static String getCallingClass(int backTrace) {
 		return null;
 	}
-	
+
 	public static OutputStream newDeflaterOutputStream(OutputStream os) throws IOException {
 		return new DeflaterOutputStream(os);
 	}
-	
+
 	public static OutputStream newGZIPOutputStream(OutputStream os) throws IOException {
 		return new GZIPOutputStream(os);
 	}
-	
+
 	public static InputStream newInflaterInputStream(InputStream is) throws IOException {
 		return new InflaterInputStream(is);
 	}
-	
+
 	public static InputStream newGZIPInputStream(InputStream is) throws IOException {
 		return new GZIPInputStream(is);
 	}
-	
+
 	@JSBody(params = { }, script = "return window.location.protocol && window.location.protocol.toLowerCase().startsWith(\"https\");")
 	public static native boolean requireSSL();
-	
+
 	public static IClientConfigAdapter getClientConfigAdapter() {
 		return TeaVMClientConfigAdapter.instance;
 	}
@@ -520,6 +520,7 @@ public class PlatformRuntime {
 	private static final Date dateInstance = new Date();
 
 	public static void toggleRec() {
+		/*
 		if (recording && !canRec) {
 			return;
 		}
@@ -556,5 +557,7 @@ public class PlatformRuntime {
 			stopRec(mediaRec);
 			mediaRec = null;
 		}
+
+		 */
 	}
 }

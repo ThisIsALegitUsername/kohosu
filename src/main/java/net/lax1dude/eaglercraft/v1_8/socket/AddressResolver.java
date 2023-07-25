@@ -1,28 +1,32 @@
+/*
 package net.lax1dude.eaglercraft.v1_8.socket;
 
 import net.lax1dude.eaglercraft.v1_8.EagRuntime;
 import net.minecraft.client.multiplayer.ServerAddress;
 import net.minecraft.client.multiplayer.ServerData;
 
+ */
+
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
- * 
+ *
  * WITH THE EXCEPTION OF PATCH FILES, MINIFIED JAVASCRIPT, AND ALL FILES
  * NORMALLY FOUND IN AN UNMODIFIED MINECRAFT RESOURCE PACK, YOU ARE NOT ALLOWED
  * TO SHARE, DISTRIBUTE, OR REPURPOSE ANY FILE USED BY OR PRODUCED BY THE
  * SOFTWARE IN THIS REPOSITORY WITHOUT PRIOR PERMISSION FROM THE PROJECT AUTHOR.
- * 
+ *
  * NOT FOR COMMERCIAL OR MALICIOUS USE
- * 
- * (please read the 'LICENSE' file this repo's root directory for more info) 
- * 
+ *
+ * (please read the 'LICENSE' file this repo's root directory for more info)
+ *
  */
+/*
 public class AddressResolver {
 
 	public static String resolveURI(ServerData input) {
 		return resolveURI(input.serverIP);
 	}
-	
+
 	public static String resolveURI(String input) {
 		String lc = input.toLowerCase();
 		if(!lc.startsWith("ws://") && !lc.startsWith("wss://")) {
@@ -57,5 +61,7 @@ public class AddressResolver {
 		}
 		return new ServerAddress(uri, port);
 	}
-	
+
 }
+
+ */

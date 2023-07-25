@@ -1,4 +1,4 @@
-package net.lax1dude.eaglercraft.v1_8.vfs;
+//package net.lax1dude.eaglercraft.v1_8.vfs;
 
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
@@ -13,9 +13,11 @@ package net.lax1dude.eaglercraft.v1_8.vfs;
  * (please read the 'LICENSE' file this repo's root directory for more info)
  *
  */
-
+/*
 public class FolderResourcePack extends net.lax1dude.eaglercraft.v1_8.internal.vfs.FolderResourcePack {
 	public FolderResourcePack(String resourcePackFileIn, String prefix) {
 		super(resourcePackFileIn, prefix);
 	}
 }
+
+ */

@@ -14,22 +14,22 @@ import net.lax1dude.eaglercraft.v1_8.internal.buffer.FloatBuffer;
 import net.lax1dude.eaglercraft.v1_8.log4j.LogManager;
 import net.lax1dude.eaglercraft.v1_8.log4j.Logger;
 import net.lax1dude.eaglercraft.v1_8.opengl.FixedFunctionShader.FixedFunctionConstants;
-import net.lax1dude.eaglercraft.v1_8.opengl.ext.deferred.DeferredStateManager;
+//import net.lax1dude.eaglercraft.v1_8.opengl.ext.deferred.DeferredStateManager;
 import net.lax1dude.eaglercraft.v1_8.vector.Matrix4f;
 import net.lax1dude.eaglercraft.v1_8.vector.Vector4f;
 
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
- * 
+ *
  * WITH THE EXCEPTION OF PATCH FILES, MINIFIED JAVASCRIPT, AND ALL FILES
  * NORMALLY FOUND IN AN UNMODIFIED MINECRAFT RESOURCE PACK, YOU ARE NOT ALLOWED
  * TO SHARE, DISTRIBUTE, OR REPURPOSE ANY FILE USED BY OR PRODUCED BY THE
  * SOFTWARE IN THIS REPOSITORY WITHOUT PRIOR PERMISSION FROM THE PROJECT AUTHOR.
- * 
+ *
  * NOT FOR COMMERCIAL OR MALICIOUS USE
- * 
- * (please read the 'LICENSE' file this repo's root directory for more info) 
- * 
+ *
+ * (please read the 'LICENSE' file this repo's root directory for more info)
+ *
  */
 public class InstancedFontRenderer {
 
@@ -64,19 +64,19 @@ public class InstancedFontRenderer {
 	private static float stateColorBiasG = -999.0f;
 	private static float stateColorBiasB = -999.0f;
 	private static float stateColorBiasA = -999.0f;
-	
+
 	private static final Matrix4f tmpMatrix = new Matrix4f();
 	private static final Vector4f tmpVector = new Vector4f();
 	private static int stateModelMatrixSerial = -1;
 	private static int stateProjectionMatrixSerial = -1;
-	
+
 	private static float charWidthValue = -1;
 	private static float charHeightValue = -1;
 	private static float charCoordWidthValue = -1.0f;
 	private static float charCoordHeightValue = -1.0f;
-	
+
 	static void initialize() {
-		
+
 		String vertexSource = EagRuntime.getResourceString(vertexShaderPath);
 		if(vertexSource == null) {
 			throw new RuntimeException("InstancedFontRenderer shader \"" + vertexShaderPath + "\" is missing!");
@@ -165,9 +165,9 @@ public class InstancedFontRenderer {
 
 		FloatBuffer verts = EagRuntime.allocateFloatBuffer(108);
 		verts.put(new float[] {
-				
+
 				// (0 - 6 - 12) regular:
-				
+
 				0.0f, 0.0f, 0.25f,  0.0f, 1.0f, 0.25f,  1.0f, 0.0f, 0.25f,
 				1.0f, 0.0f, 0.25f,  0.0f, 1.0f, 0.25f,  1.0f, 1.0f, 0.25f,
 				0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 0.0f,
@@ -213,7 +213,7 @@ public class InstancedFontRenderer {
 		_wglEnableVertexAttribArray(3);
 		_wglVertexAttribPointer(3, 4, GL_UNSIGNED_BYTE, true, 10, 6);
 		_wglVertexAttribDivisor(3, 1);
-		
+
 	}
 
 	private static ByteBuffer fontDataBuffer = null;
@@ -250,19 +250,19 @@ public class InstancedFontRenderer {
 			return;
 		}
 		EaglercraftGPU.bindGLShaderProgram(shaderProgram);
-		
+
 		if(charWidth != charWidthValue || charHeight != charHeightValue) {
 			charWidthValue = charWidth;
 			charHeightValue = charHeight;
 			_wglUniform2f(u_charSize2f, (float)charWidth, (float)charHeight);
 		}
-		
+
 		if(charCoordWidth != charCoordWidthValue || charCoordHeight != charCoordHeightValue) {
 			charCoordWidthValue = charCoordWidth;
 			charCoordHeightValue = charCoordHeight;
 			_wglUniform2f(u_charCoordSize2f, charCoordWidth, charCoordHeight);
 		}
-		
+
 		int ptr1 = GlStateManager.modelMatrixStackPointer;
 		int serial1 = GlStateManager.modelMatrixStackAccessSerial[ptr1];
 		int ptr2 = GlStateManager.projectionMatrixStackPointer;
@@ -276,8 +276,8 @@ public class InstancedFontRenderer {
 			matrixCopyBuffer.flip();
 			_wglUniformMatrix4fv(u_matrixTransform, false, matrixCopyBuffer);
 		}
-		
-		if(!fogEnabled || DeferredStateManager.isInDeferredPass()) {
+
+		if(!fogEnabled) {
 			int serial = GlStateManager.stateColorSerial;
 			if(stateColorSerial != serial) {
 				stateColorSerial = serial;

@@ -11,53 +11,52 @@ import net.lax1dude.eaglercraft.v1_8.EagRuntime;
 import net.lax1dude.eaglercraft.v1_8.internal.PlatformBufferFunctions;
 import net.lax1dude.eaglercraft.v1_8.log4j.LogManager;
 import net.lax1dude.eaglercraft.v1_8.vector.Vector3f;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.util.MathHelper;
+import net.lax1dude.eaglercraft.v1_8.MathHelper;
 
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
- * 
+ *
  * WITH THE EXCEPTION OF PATCH FILES, MINIFIED JAVASCRIPT, AND ALL FILES
  * NORMALLY FOUND IN AN UNMODIFIED MINECRAFT RESOURCE PACK, YOU ARE NOT ALLOWED
  * TO SHARE, DISTRIBUTE, OR REPURPOSE ANY FILE USED BY OR PRODUCED BY THE
  * SOFTWARE IN THIS REPOSITORY WITHOUT PRIOR PERMISSION FROM THE PROJECT AUTHOR.
- * 
+ *
  * NOT FOR COMMERCIAL OR MALICIOUS USE
- * 
- * (please read the 'LICENSE' file this repo's root directory for more info) 
- * 
+ *
+ * (please read the 'LICENSE' file this repo's root directory for more info)
+ *
  */
 public class WorldRenderer {
-	
+
 	private boolean needsUpdate;
 	private int drawMode;
 	private double xOffset;
 	private double yOffset;
 	private double zOffset;
 	private boolean isDrawing;
-	
+
 	private VertexFormat vertexFormat;
-	
+
 	private int vertexCount;
 	private ByteBuffer byteBuffer;
 	private IntBuffer intBuffer;
 	private FloatBuffer floatBuffer;
-	
+
 	private boolean hasBeenFreed = false;
 
 	public WorldRenderer(int bufferSizeIn) {
-		this.byteBuffer = GLAllocation.createDirectByteBuffer(bufferSizeIn << 2);
+		//this.byteBuffer = GLAllocation.createDirectByteBuffer(bufferSizeIn << 2);
 		this.intBuffer = this.byteBuffer.asIntBuffer();
 		this.floatBuffer = this.byteBuffer.asFloatBuffer();
 	}
-	
+
 	public void free() {
 		if(!hasBeenFreed) {
 			hasBeenFreed = true;
 			EagRuntime.freeByteBuffer(byteBuffer);
 		}
 	}
-	
+
 	public void finalize() {
 		free();
 	}
@@ -69,12 +68,12 @@ public class WorldRenderer {
 			int k = (((pos + parInt1 + (parInt1 >> 1)) >> 16) + 1) << 16;
 			LogManager.getLogger() .warn("Needed to grow BufferBuilder buffer: Old size " + (i << 2) +
 					" bytes, new size " + (k << 2) + " bytes.");
-			ByteBuffer bytebuffer = GLAllocation.createDirectByteBuffer(k << 2);
+			//ByteBuffer bytebuffer = GLAllocation.createDirectByteBuffer(k << 2);
 			this.byteBuffer.position(0);
-			bytebuffer.put(this.byteBuffer);
-			bytebuffer.rewind();
+			//bytebuffer.put(this.byteBuffer);
+			//bytebuffer.rewind();
 			EagRuntime.freeByteBuffer(this.byteBuffer);
-			this.byteBuffer = bytebuffer;
+			//this.byteBuffer = bytebuffer;
 			this.intBuffer = this.byteBuffer.asIntBuffer();
 			this.floatBuffer = this.byteBuffer.asFloatBuffer();
 		}
@@ -272,7 +271,7 @@ public class WorldRenderer {
 		}
 		this.intBuffer.put(i, j);
 	}
-	
+
 	/**
 	 * sets color multiplier of a vertex parInt1 indicies before the current vertex
 	 */
@@ -338,7 +337,7 @@ public class WorldRenderer {
 	public void addVertexData(int[] vertexData) {
 		this.grow(vertexData.length);
 		PlatformBufferFunctions.put(this.intBuffer, (this.vertexCount * this.vertexFormat.attribStride) >> 2, vertexData);
-		this.vertexCount += vertexData.length / (this.vertexFormat.attribStride >> 2); 
+		this.vertexCount += vertexData.length / (this.vertexFormat.attribStride >> 2);
 	}
 
 	/**

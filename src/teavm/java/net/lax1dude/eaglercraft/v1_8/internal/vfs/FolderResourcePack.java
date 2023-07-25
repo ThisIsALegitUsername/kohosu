@@ -1,3 +1,4 @@
+/*
 package net.lax1dude.eaglercraft.v1_8.internal.vfs;
 
 import com.google.common.collect.Sets;
@@ -6,6 +7,8 @@ import net.minecraft.client.resources.AbstractResourcePack;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
+
+ */
 
 /**
  * Copyright (c) 2022-2023 LAX1DUDE. All Rights Reserved.
@@ -20,7 +23,7 @@ import java.util.Set;
  * (please read the 'LICENSE' file this repo's root directory for more info)
  *
  */
-
+/*
 public class FolderResourcePack extends AbstractResourcePack {
 	private final String prefix;
 
@@ -56,3 +59,5 @@ public class FolderResourcePack extends AbstractResourcePack {
 		return set;
 	}
 }
+
+ */
